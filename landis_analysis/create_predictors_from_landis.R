@@ -7,7 +7,6 @@ options(warn = 0)
 model_name <- "LowTLowV BAU"
 model_dir <- paste0("D:/SApps LANDIS/Model templates/", model_name, "/")
 input_dir <- "D:/SApps LANDIS/Inputs/"
-year <- 0
 
 comm_output <- read.csv(paste0(model_dir, "/community-input-file-", year,".csv"))
 comm_map <- terra::rast(paste0(model_dir, "/output-community-", year, ".img"))

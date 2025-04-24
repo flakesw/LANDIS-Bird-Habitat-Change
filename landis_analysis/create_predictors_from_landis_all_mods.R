@@ -6,23 +6,27 @@ library("sf")
 library("tidyverse")
 
 #"HighTHighV BAU extra Rx"
+model_parent_dir <- "C:/Users/swflake/Documents/SApps LANDIS/Model templates/"
+model_names <- c("LowTLowV BAU", "HighTHighV BAU")
 
-model_names <- c("LowTLowV BAU", "LowTLowV BAU extra Rx", "LowTLowV BAU nofire",
-                 "HighTHighV BAU nofire", "HighTHighV BAU extra Rx")
-
-input_dir <- "C:/Users/swflake/Documents/SApps LANDIS/Inputs/"
-years <- c(10,20,30,40,50, 60)
+input_dir <- "D:/SApps LANDIS/Inputs/" #"C:/Users/swflake/Documents/SApps LANDIS/Inputs/"
+years <- c(0, 80)
 
 for(model in model_names){
   for(year in years){
-    make_predictor_stack_from_landis(model_name = model, input_dir = input_dir, year)
+    make_predictor_stack_from_landis(model_parent_dir = model_parent_dir,
+                                     model_name = model, input_dir = input_dir, year)
   }
 }
 
-make_predictor_stack_from_landis <- function(model_name, input_dir, year)
+model_parent_dir <- "C:/Users/Sam/Documents/GlobusEndpoint/"
+model_name <- "LowTLowV BAU - Run1"
+year <- 80
+
+make_predictor_stack_from_landis <- function(model_dir, model_name, input_dir, year)
 {
 
-  model_dir <- paste0("C:/Users/swflake/Documents/SApps LANDIS/Model templates/", model_name, "/")
+  model_dir <- paste0(model_parent_dir, model_name, "/")
   
   comm_output <- read.csv(paste0(model_dir, "/community-input-file-", year,".csv"))
   comm_map <- terra::rast(paste0(model_dir, "/output-community-", year, ".img"))
@@ -32,7 +36,7 @@ make_predictor_stack_from_landis <- function(model_name, input_dir, year)
   ecoregions <- terra::rast(paste0(input_dir, "Basic_inputs/Ecos11_NCLD.tif"))
   plot(ecoregions)
   
-  predictor_stack <- terra::rast("./landis_predictor_layers/pred_stack_study_area.tif")
+  predictor_stack <- terra::rast("./landis_analysis/landis_predictor_layers/pred_stack_study_area.tif")
   predictor_stack2 <- predictor_stack 
   
   comm_rast <- terra::ifel(comm_map %in% comm_output$MapCode, comm_map, NA)
