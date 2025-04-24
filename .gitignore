@@ -5,3 +5,5 @@
 *.RData
 /sdms
 /old
+/.Rproj.user
+landis_analysis/landis_predictor_layers/predictor_stack_bcr28_train.tif
