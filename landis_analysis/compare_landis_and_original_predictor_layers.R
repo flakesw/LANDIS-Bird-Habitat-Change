@@ -13,17 +13,16 @@ library("terra")
 library("sf")
 library("tidyverse")
 options(warn = 0)
-input_dir <- "D:/SApps LANDIS/"
 
-comm_output <- read.csv("./landis_analysis/landis_predictor_layers/initial landscape layers/community-input-file-0.csv")
-comm_map <- terra::rast("./landis_analysis/landis_predictor_layers/initial landscape layers/output-community-0.img")
+comm_output <- read.csv("./landis_analysis/reference/initial landscape layers/community-input-file-0.csv")
+comm_map <- terra::rast("./landis_analysis/reference/initial landscape layers/output-community-0.img")
 plot(comm_map)
 
-climate_future <- read.csv(paste0("./landis_analysis/landis_predictor_layers/initial landscape layers/Climate-future-input-log.csv"))
-ecoregions <- terra::rast(paste0(input_dir, "/Inputs/Basic_inputs/Ecos11_NCLD.tif"))
-plot(ecoregions)
+climate_future <- read.csv(paste0("./landis_analysis/reference/initial landscape layers/Climate-future-input-log.csv"))
+ecoregions <- terra::rast(paste0("./landis_analysis/reference/Ecos11_NCLD.tif"))
+# plot(ecoregions)
 
-predictor_stack <- terra::rast("./landis_analysis/landis_predictor_layers/predictor_stack_bcr28.tif")
+predictor_stack <- terra::rast("./landis_analysis/landis_predictor_layers/predictor_stack_bcr28_train.tif")
 predictor_stack2 <- predictor_stack %>%
   project(ecoregions, mask = TRUE, method = "near", align = FALSE) %>%
   mask(ecoregions, maskvalues = 1)
@@ -31,72 +30,15 @@ predictor_stack_coarse <- terra::aggregate(predictor_stack2, 5, na.rm = TRUE)
 samp <- sample(length(predictor_stack2[]), 10000)
 samp_coarse <- sample(length(predictor_stack_coarse[]), 10000)
 
-comm_rast <- terra::ifel(comm_map %in% comm_output$MapCode, comm_map, NA)
-
-
-#----------------------------------------------------------
-# estimate cohort attributes from FIA
-library("tidyverse")
-library("rFIA")
-
-
-#what states should we use for the analysis?
-states <- c("NC", "TN", "VA", "KY", "GA", "SC")
-
-#this script uses the rFIA package to access the tables needed
-tables <- c("TREE","SEEDLING","PLOT", "COND", "SITETREE")
-directory <- "D:/Data/fia/rFIA_downloads"
-
-
-#import fia data
-#using rFIA package automatically knits the tables together; you could also
-# use readr::read_csv() or import several csvs then rbind() 
-fia <- readFIA(dir = directory,
-               tables = tables,
-               states = states)
-
-trees <- fia$TREE
-plot <- fia$PLOT %>%
-  mutate(PLOT.YEAR = paste(CN, INVYR, sep="."))
-cond <- fia$COND
-seedlings <- fia$SEEDLING
-sitetrees <- fia$SITETREE
-
-rm(fia)
-gc()
-
-sp_ref <- read.csv("D:/Data/fia/FIADB_REFERENCE/REF_SPECIES.csv")
-
-
-cond_to_use <- cond %>%
-  filter(!(DSTRBCD1 %in% c(30,31,32,46,53,54,80)),
-         !(DSTRBCD2 %in% c(30,31,32,46,53,54,80)),
-         !(DSTRBCD3 %in% c(30,31,32,46,53,54,80)),
-         TRTCD1 == 0 | is.na(TRTCD1),
-         TRTCD2 == 0 | is.na(TRTCD2),
-         TRTCD3 == 0 | is.na(TRTCD3)) %>%
-  mutate(IS_FOREST = ifelse(FORTYPCD %in%(c(1:998)), 1, 0)) %>%
-  group_by(PLT_CN) %>%
-  summarise(total_cond = sum(CONDPROP_UNADJ),
-            natural = sum(STDORGCD, na.rm = TRUE),
-            treatment = sum(TRTCD1, na.rm = TRUE),
-            proportion_forest = sum(CONDPROP_UNADJ * IS_FOREST)) %>%
-  filter(total_cond > 0.95,
-         proportion_forest > 0.95)
-
-plots_to_use <- plot %>%
-  filter(PLOT_STATUS_CD == 1) %>%
-  left_join(cond_to_use, by = c("CN" = "PLT_CN")) %>%
-  dplyr::select(CN, proportion_forest)
-
+comm_map[] <- ifelse(comm_map[] %in% comm_output$MapCode, comm_map[], NA)
+comm_rast <- comm_map
 
 #species reference data
-sp_data <- read.csv(paste0(input_dir, "/Inputs/NECN/NECN_Spp_Table-NECN_v6.csv"))
-spp_to_use <- sp_data$SpeciesCode
+sp_ref <- read.csv("./landis_analysis/reference/REF_SPECIES.csv")
 
-# func_table <- read.csv("./Models/Input_files/necn_functional_params.csv")
-# sp_table <- read.csv("./Models/Input_files/necn_species_params.csv") %>%
-#   left_join(func_table, by = "FunctionalGroupIndex") 
+sp_data <- read.csv("./landis_analysis/reference/NECN_Spp_Table-NECN_v6.csv")
+
+spp_to_use <- sp_data$SpeciesCode
 spp_to_use_all <- sp_data$SpeciesCode
 
 sp_ref$SpeciesCode <- paste0(substr(sp_ref$GENUS, 1, 4), substr(sp_ref$SPECIES, 1, 4) %>%
@@ -119,41 +61,14 @@ spp_crosswalk <- rbind(spp_crosswalk,
                        c("TiliAmhe", 951)) %>%
   mutate(SPCD = as.integer(SPCD))
 
-sitetrees_bak <- sitetrees
 
-sitetrees <- sitetrees_bak %>%
-  # filter(PLT_CN %in% plots$CN) %>%
-  mutate(SFTWD_HRDWD = sp_ref[match(SPCD, sp_ref$SPCD), "SFTWD_HRDWD"]) %>% #add a softwood/hardwood column for later 
-  dplyr::rename(CohortAge = AGEDIA) %>%
-  mutate(CohortAge = CohortAge + 5)
-
-#fit a linear regression 
-tree_regressions <- sitetrees %>% 
-  dplyr::filter(!is.na(HT) & !is.na(CohortAge) & !is.na(SPCD)) %>%
-  dplyr::filter(SPCD %in% spp_crosswalk$SPCD) %>%
-  dplyr::group_by(SPCD) %>%
-  dplyr::do(model = lm(log(HT) ~ log(CohortAge), data = .))
-
-newdat <- data.frame(CohortAge = seq(1, 200, length.out = 1000))
-
-map(tree_regressions$model, .f = function(x) summary(x))
-map(tree_regressions$model, .f = function(x) plot(exp(predict(x, newdata = newdat)) ~ newdat$CohortAge))
-
-
-#do models for hardwood and softwood -- 
-hardwood_regression <- lm(HT ~ log(CohortAge) + 0, data = sitetrees[sitetrees$SFTWD_HRDWD == "H", ])
-softwood_regression <- lm(HT ~ log(CohortAge) + 0, data = sitetrees[sitetrees$SFTWD_HRDWD == "S", ])
-
-tree_regressions <- tibble(SPCD = c(1,2),
-                           model = list(hardwood_regression, softwood_regression)) %>%
-  bind_rows(tree_regressions, .)
-
+#height regressions fit in create_models_height_from_cohort_attr.R
+tree_regressions <- readRDS("./landis_analysis/reference/tree_height_regressions.RDS")
 
 comm_height <- comm_output %>%
   left_join(select(spp_crosswalk, SpeciesCode, SPCD), by = c("SpeciesName" = "SpeciesCode")) %>%
   left_join(select(sp_ref, SPCD, SFTWD_HRDWD)) %>%
   mutate(HT = NA)
-  
   
 spcd_in_comm <- unique(comm_height$SPCD)
 
@@ -170,15 +85,20 @@ for(i in 1:length(spcd_in_comm)){
                                                       newdata = newdat))
   
   }else if(spcd %in% sp_ref$SPCD[sp_ref$SFTWD_HRDWD == "H"]){
-      comm_height[which(comm_height$SPCD == spcd), "HT"] <- predict(hardwood_regression,
-                                                                    newdata = newdat)
+      comm_height[which(comm_height$SPCD == spcd), "HT"] <- exp(predict(tree_regressions$model[tree_regressions$SPCD == 1][[1]], 
+                                                                    newdata = newdat)) #SPCD set in create_models script; not a real FIA code
   }else{
-    comm_height[which(comm_height$SPCD == spcd), "HT"] <- predict(softwood_regression,
-                                                                  newdata = newdat)
+    comm_height[which(comm_height$SPCD == spcd), "HT"] <-exp(predict(tree_regressions$model[tree_regressions$SPCD == 2][[1]],
+                                                                     newdata = newdat)) #SPCD set in create_models script; not a real FIA code
   }
 }
 
 comm_height$HT <- comm_height$HT / 3.28
+
+
+#----------------------------
+#Compare rasters
+#---------------------------
 
 height_rast_max <- comm_height %>%
   group_by(MapCode) %>%

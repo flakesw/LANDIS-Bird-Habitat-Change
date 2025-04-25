@@ -3,18 +3,16 @@ library("terra")
 library("sf")
 library("tidyverse")
 options(warn = 0)
-input_dir <- "D:/SApps LANDIS/"
 
-
-comm_output <- read.csv("./landis_analysis/landis_predictor_layers/initial landscape layers/community-input-file-0.csv")
-comm_map <- terra::rast("./landis_analysis/landis_predictor_layers/initial landscape layers/output-community-0.img")
+comm_output <- read.csv("./landis_analysis/reference/initial landscape layers/community-input-file-0.csv")
+comm_map <- terra::rast("./landis_analysis/reference/initial landscape layers/output-community-0.img")
 plot(comm_map)
 
-climate_future <- read.csv(paste0("./landis_analysis/landis_predictor_layers/initial landscape layers/Climate-future-input-log.csv"))
-ecoregions <- terra::rast(paste0(input_dir, "/Inputs/Basic_inputs/Ecos11_NCLD.tif"))
+climate_future <- read.csv(paste0("./landis_analysis/reference/initial landscape layers/Climate-future-input-log.csv"))
+ecoregions <- terra::rast(paste0(input_dir, "./landis_analysis/reference/Ecos11_NCLD.tif"))
 plot(ecoregions)
 
-predictor_stack <- terra::rast("./landis_analysis/landis_predictor_layers/predictor_stack_bcr28.tif")
+predictor_stack <- terra::rast("./landis_analysis/landis_predictor_layers/predictor_stack_bcr28_train.tif")
 predictor_stack2 <- predictor_stack %>%
   project(ecoregions, mask = TRUE, method = "near", align = FALSE) %>%
   mask(ecoregions, maskvalues = 1)
