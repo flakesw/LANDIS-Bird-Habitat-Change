@@ -27,147 +27,98 @@ theme_set(theme_gray())
 #              legend.position = "none")
 theme_update(legend.position = "none")
 
-ecoregions <- terra::rast("C:/Users/Sam/Documents/Research/Project-Southern-Appalachians-2018/Models/LANDIS_Sapps_Ecosystem_Papers/Ecos11_NCLD.tif")
+ecoregions <- terra::rast("./landis_analysis/reference/Ecos11_NCLD.tif")
 
-states <- sf::st_read("C:/Users/Sam/Documents/Maps/Basic maps/state boundaries/cb_2018_us_state_5m/cb_2018_us_state_5m.shp") %>%
-  sf::st_transform(crs = crs(ecoregions)) %>%
-  st_crop(ecoregions)
 
-species <- "gwwa"
-model_name <- "LowTLowV BAU"
-model_dir <- paste0("D:/SApps LANDIS/Model templates/", model_name, "/")
-input_dir <- "D:/SApps LANDIS/Inputs/"
-year <- 0
+pred_dir <- "./landis_analysis/landis_predictor_layers/landis_predictors/"
+all_pred_stacks <- list.files(pred_dir)
+pred_info <- tibble(model_loc = all_pred_stacks,
+                    model = str_split(all_pred_stacks, pattern = "_") %>% map(pluck(3)) %>% unlist()) %>%
+  mutate(climate = str_split(model, " ") %>% map(pluck(2)) %>% unlist(),
+         replicate = str_split(model, " ") %>% map(pluck(4)) %>% unlist(),
+         year = str_split(all_pred_stacks, pattern = "[_.]+") %>% map(pluck(4)) %>% unlist())
 
-full_model <- readRDS(paste0("./landis_analysis/models_for_landis/", species, "_dist_model_full_landis.RDS"))
-
-predictor_stack_init <- terra::rast("./landis_analysis/landis_predictor_layers/pred_stack_study_area.tif")
-
-preds_init <- terra::predict(object = predictor_stack_init, 
-                             model = full_model,
-                             # ext = st_bbox(bcr_albers),
-                             const = data.frame(time_observations_started = 7,
-                                                duration_minutes = 60)
-)
-
-values(preds_init) <- boot::inv.logit(values(preds_init))
-preds_init <- crop(preds_init, ecoregions) %>%
-  terra::project(ecoregions) %>%
+predictor_stack_orig <- rast("./landis_analysis/landis_predictor_layers/predictor_stack_bcr28_train.tif") %>%
+  project(ecoregions, mask = TRUE, method = "near", align = FALSE) %>%
   mask(ecoregions, maskvalues = 1)
-plot(preds_init)
-writeRaster(preds_init, "gwwa_time_0.tif")
-
-ggplot() +
-  geom_sf(data = states, colour = "black", fill = NA) + 
-  geom_spatraster(data = preds_init) +
-  scale_fill_terrain_c(alpha = 0.7, limits = c(0,1)) + 
-  # geom_sf(data = bcr_albers, fill = NA) +
-  labs(fill = "Habitat index")
-
-#making original predictor stack, onle need to do once
-# pred_stack_orig <- terra::rast("predictor_layers/predictor_stack.grd") %>%
-#   terra::project(ecoregions) %>%
-#   mask(ecoregions, maskvalues = 1)
-# # writeRaster(pred_stack_orig, "pred_stack_study_area.tif")
-
-#----------------------------------------------------------------
-#updated predictions for given year/model
-
-predictor_stack <- terra::rast(paste0("./landis_analysis/landis_predictor_layers/pred_stack_", 
-                                      model_name, "_", year, ".tif"))%>%
-  terra::project(ecoregions) %>%
-  mask(ecoregions, maskvalues = 1)
-predictor_stack$understory_ratio <- 1 - predictor_stack$understory_ratio
+names(predictor_stack_orig)[30] <- "Npp"
 
 
-preds <- terra::predict(object = predictor_stack, 
-                        model = full_model,
-                        # ext = st_bbox(bcr_albers),
-                        const = data.frame(time_observations_started = 7,
-                                           duration_minutes = 60)
-                        )
-
-values(preds) <- boot::inv.logit(values(preds))
-preds <- crop(preds, ecoregions) %>%
-  terra::project(ecoregions) %>%
-  mask(ecoregions, maskvalues = 1)
-plot(preds)
+species_list <- c("bcch", "blbw",  "cerw", "gwwa", "heth", "kewa", "lowa",
+                  "praw", "prow", "recr", "swwa", "veer", "wewa","ytwa",
+                  "ewpw", "rugr", "nswo",  "acfl", "alfl", "bhnu")
 
 
+for(i in 1:length(species_list)){
+  species <- species_list[i]
+  mod <- list.files("./landis_analysis/models_for_landis/", full.names = TRUE) %>%
+    `[`(grep(species, .)) %>%
+    readRDS()
+  mod <- mod$models[[1]]
 
-ggplot() +
-  geom_sf(data = states, colour = "black", fill = NA) + 
-  geom_spatraster(data = preds) +
-  scale_fill_terrain_c(alpha = 0.7, limits = c(0,1)) + 
-  # geom_sf(data = bcr_albers, fill = NA) +
-  labs(fill = "Habitat index")
-
-#--------------------
-#climate variables held constant
-clim_stack <- c(predictor_stack_init[[c(11,12,13)]], predictor_stack[[-c(4,5,6)]])
-
-clim_preds <- terra::predict(object = clim_stack,  #TODO fix this like I did below
-                                      model = full_model,
-                                      # ext = st_bbox(bcr_albers),
-                                      const = data.frame(time_observations_started = 7,
-                                                         duration_minutes = 60)
-        )
-
-values(clim_preds) <- boot::inv.logit(values(clim_preds)) 
-
-clim_preds <- clim_preds %>%
-  crop(ecoregions) %>%
-  terra::project(ecoregions) %>%
-  mask(ecoregions, maskvalues = 1)
-  
-writeRaster(clim_preds, "./landis_analysis/landis_predictions/prediction_gwwa_LowTLowV BAU_60 constant_clim.tif")
-
-ggplot() +
-  geom_sf(data = states, colour = "black", fill = NA) + 
-  geom_spatraster(data = clim_preds) +
-  scale_fill_terrain_c(alpha = 0.7) + 
-  # geom_sf(data = bcr_albers, fill = NA) +
-  labs(fill = "P(observation)")
-
-
-plot(clim_preds - preds_init, col = diverging_color_ramp(clim_preds - preds_init))
-preds_init[preds_init[] == 0] <- 0.01
-clim_preds[clim_preds[] == 0] <- 0.01
-ggplot() +
-  geom_spatraster(data = (clim_preds - preds_init)/preds_init) +
-  scale_fill_distiller(palette = "RdBu", limits = c(-10, 10), 
-                       direction = 1, na.value = 0)
-
-#----------------
-#vegetation variables held constant
-veg_stack <- c(predictor_stack_init[[c(1,2,17)]], predictor_stack[[-c(1,2,3)]])
-veg_preds <- terra::predict(object = veg_stack, 
-                             model = full_model,
-                             # ext = st_bbox(bcr_albers),
-                             const = data.frame(time_observations_started = 7,
-                                                duration_minutes = 60)
-                              )
-
-values(veg_preds) <- boot::inv.logit(values(veg_preds)) 
-
-veg_preds <- veg_preds %>%
-  crop(ecoregions) %>%
-  terra::project(ecoregions) %>%
-  mask(ecoregions, maskvalues = 1)
-
-ggplot() +
-  geom_sf(data = states, colour = "black", fill = NA) + 
-  geom_spatraster(data = veg_preds) +
-  scale_fill_terrain_c(alpha = 0.7) + 
-  # geom_sf(data = bcr_albers, fill = NA) +
-  labs(fill = "P(observation)")
-
-
-plot(veg_preds - preds_init, col = diverging_color_ramp(veg_preds - preds_init))
-
-writeRaster(veg_preds, "./landis_analysis/landis_predictions/prediction_cerw_LowTLowV BAU_60 constant_veg.tif")
-
-ggplot() +
-  geom_spatraster(data = veg_preds - preds_init) +
-  scale_fill_distiller(palette = "RdBu", limits = c(-1, 1), 
-                       direction = 1, na.value = "transparent")
+  for(j in 1:nrow(pred_info)){#----------------------------------------------------------------
+  #updated predictions for given year/model
+    
+    predictor_stack <- paste0(pred_dir, pred_info$model_loc[j]) %>%
+      terra::rast() %>%
+      terra::project(ecoregions) %>%
+      mask(ecoregions, maskvalues = 1)
+    
+    
+    preds <- terra::predict(object = predictor_stack, 
+                            model = mod,
+                            # ext = st_bbox(bcr_albers),
+                            const = data.frame(time_observations_started = 7,
+                                               duration_minutes = 60)
+                            )
+    
+    values(preds) <- boot::inv.logit(values(preds))
+    preds <- crop(preds, ecoregions) %>%
+      terra::project(ecoregions) %>%
+      mask(ecoregions, maskvalues = 1)
+    plot(preds)
+    
+    writeRaster(preds, filename = paste0("./landis_analysis/landis_predictions/full_predictions_", 
+                                         species, "_", pred_info$model[j], "_", pred_info$year[j], ".tif"))
+    #--------------------
+    #climate variables held constant
+    clim_stack <- c(predictor_stack_orig[[c(6:14)]], predictor_stack[[-c(10:15)]])
+    
+    clim_preds <- terra::predict(object = clim_stack,  #TODO fix this like I did below
+                                          model = mod,
+                                          # ext = st_bbox(bcr_albers),
+                                          const = data.frame(time_observations_started = 7,
+                                                             duration_minutes = 60)
+            )
+    
+    values(clim_preds) <- boot::inv.logit(values(clim_preds)) 
+    
+    clim_preds <- clim_preds %>%
+      crop(ecoregions) %>%
+      terra::project(ecoregions) %>%
+      mask(ecoregions, maskvalues = 1)
+    
+    writeRaster(clim_preds, filename = paste0("./landis_analysis/landis_predictions/clim_predictions_", 
+                                              species, "_", pred_info$model[j], "_", pred_info$year[j], ".tif"))
+    
+    #----------------
+    #vegetation variables held constant
+    veg_stack <- c(predictor_stack_orig[[c(1,2,3,4,5,18:18:30)]], predictor_stack[[-c(1:9, 19)]])
+    veg_preds <- terra::predict(object = veg_stack, 
+                                 model = mod,
+                                 # ext = st_bbox(bcr_albers),
+                                 const = data.frame(time_observations_started = 7,
+                                                    duration_minutes = 60)
+                                  )
+    
+    values(veg_preds) <- boot::inv.logit(values(veg_preds)) 
+    
+    veg_preds <- veg_preds %>%
+      crop(ecoregions) %>%
+      terra::project(ecoregions) %>%
+      mask(ecoregions, maskvalues = 1)
+    
+    writeRaster(veg_preds, filename = paste0("./landis_analysis/landis_predictions/veg_predictions_", 
+                                             species, "_", pred_info$model[j], "_", pred_info$year[j], ".tif"))
+  }
+}

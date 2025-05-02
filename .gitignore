@@ -8,8 +8,6 @@
 /.Rproj.user
 landis_analysis/landis_predictor_layers/predictor_stack_bcr28_train.tif
 landis_analysis/landis_predictor_layers/initial landscape layers/community-input-file-0.csv
-.Rhistory
-.Rhistory
-/.Rproj.user
 landis_analysis/reference/initial landscape layers/community-input-file-0.csv
-/.Rproj.user
+
+landis_analysis/landis_predictor_layers/old/predictor_stack_bcr28_train.tif.bak
