@@ -1,0 +1,628 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<metadata>
+  <idinfo>
+    <citation>
+      <citeinfo>
+        <origin>Samuel W. Flake, North Carolina State University</origin>
+        <pubdate>20250501</pubdate>
+        <title>Projected habitat for birds of conservation concern in the southern Appalachians, from 2020-2100	</title>
+        <edition>1.0</edition>
+        <geoform>raster digital data</geoform>
+        <pubinfo>
+          <pubplace>Raleigh, NC</pubplace>
+          <publish>North Carolina State University</publish>
+        </pubinfo>
+      </citeinfo>
+    </citation>
+    <descript>
+      <abstract>This dataset provides projections for future occurrence of several bird species of conservation concern, for the southern Appalachians of SC, GA, NC, TN, VA, and KY. Predictions were created from a LANDIS-II simulation model linked to a species distribution model. SDMs were trained on eBird data and using a suite of topographic, climatic, and vegetation variables, including spaceborne LiDAR. The LANDIS-II model was parameterized using inventory data, soils, topography, and species trait data. 
+
+The LANDIS-II model was run for 80 years using two climate scenarios. Each 10 years, vegetation and climate data was output from the LANDIS-II model and used generate predictions from the SDM. Three sets of predictions were created: a "full" prediction using all of the variables; a "clim" prediction that holds climate constant (i.e., uses year-0 climate) and vegetation data from the present timestep; and "veg" prediction that holds vegetation constant (i.e. year-0 vegetation state) with varying climate. There are five replicate runs for each climate scenario. 
+
+The naming convention is as follows: type of prediction _ species _ climate scenario _ management scenario _ replicate _ timestep
+
+For example, clim_predictions_acfl_HighTHighV BAU - Run1_30 refers to the "clim_predictions" that keep climate constant, for Alder Flycatcher, for the HadGEM2 ES365 RCP 8.5 climate scenario. It is from the first replicate model run (Run1), and data from timestep 30 (i.e., year 2050).</abstract>
+      <purpose>The data represent outcomes of a simulation modeling study to assess climate vulnerability of bird species of greatest conservation need in the southern Appalachians.</purpose>
+    </descript>
+    <timeperd>
+      <timeinfo>
+        <sngdate>
+          <caldate>20230701</caldate>
+        </sngdate>
+      </timeinfo>
+      <current>See Supplemental Info</current>
+    </timeperd>
+    <status>
+      <progress>Complete</progress>
+      <update>As needed</update>
+    </status>
+    <spdom>
+      <descgeog>Southern Appalachians</descgeog>
+      <bounding>
+        <westbc>-84.8741</westbc>
+        <eastbc>-80.9976</eastbc>
+        <northbc>36.6187</northbc>
+        <southbc>34.0985</southbc>
+      </bounding>
+    </spdom>
+    <keywords>
+      <theme>
+        <themekt>ISO 19115 Topic Category</themekt>
+        <themekey>biota</themekey>
+      </theme>
+      <theme>
+        <themekt>USGS Thesaurus</themekt>
+        <themekey>birds</themekey>
+        <themekey>biogeography</themekey>
+        <themekey>maps and atlases</themekey>
+      </theme>
+      <place>
+        <placekt>None</placekt>
+        <placekey>Appalachia</placekey>
+        <placekey>Appalachian Mountains</placekey>
+        <placekey>Southern Appalachians</placekey>
+      </place>
+    </keywords>
+    <taxonomy>
+      <keywtax>
+        <taxonkt>birds</taxonkt>
+        <taxonkey>birds</taxonkey>
+        <taxonkey>aves</taxonkey>
+      </keywtax>
+      <taxoncl>
+        <taxonrn>Kingdom</taxonrn>
+        <taxonrv>Aves</taxonrv>
+        <common>Birds</common>
+      </taxoncl>
+    </taxonomy>
+    <accconst>No access constraints. Please see 'Distribution Information' for details.</accconst>
+    <useconst>These data are marked with a Creative Common CC0 1.0 Universal License. These data are in the public domain and do not have any use constraints. Users are advised to read the dataset's metadata thoroughly to understand appropriate use and data limitations.</useconst>
+    <ptcontac>
+      <cntinfo>
+        <cntperp>
+          <cntper>Samuel W. Flake</cntper>
+          <cntorg>North Carolina State University</cntorg>
+        </cntperp>
+        <cntpos>Postdoctoral scholar</cntpos>
+        <cntaddr>
+          <addrtype>mailing</addrtype>
+          <address>North Carolina State University</address>
+          <city>Raleigh</city>
+          <state>NC</state>
+          <postal>27695</postal>
+        </cntaddr>
+        <cntvoice>336-944-1198</cntvoice>
+        <cntemail>swflake@ncsu.edu</cntemail>
+      </cntinfo>
+    </ptcontac>
+    <native>R version 4.2.0 (2022-04-22 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19045)
+
+R packages:
+gbm_2.1.8.1     dismo_1.3-9     raster_3.6-11   sp_1.5-1        forcats_0.5.1   stringr_1.5.0  
+dplyr_1.1.2     purrr_1.0.1     readr_2.1.2     tidyr_1.3.0     tibble_3.2.1    ggplot2_3.5.1  
+tidyverse_1.3.2 sf_1.0-19       terra_1.6-47  </native>
+  </idinfo>
+  <dataqual>
+    <attracc>
+      <attraccr>Accuracy was evaluated using cross-validated AUC (area under the curve of the receiver operating characteristic curve). </attraccr>
+    </attracc>
+    <logic>Predicted encounter rates range between 0 and 1, and visually align with expected species ranges. Data are statistically correlated with other bird distribution products (BBS, Climate Change Bird Atlas, eBird Status and Trends)</logic>
+    <complete>The data represent encounter rates fit for climate data from 2023 and vegetation data from 2014-2023, depending upon the data product.</complete>
+    <lineage>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Brian L. Sullivan</origin>
+            <origin>Christopher L. Wood</origin>
+            <origin>Marshall J. Iliff</origin>
+            <origin>Rick E. Bonney</origin>
+            <origin>Daniel Fink</origin>
+            <origin>Steve Kelling</origin>
+            <pubdate>200910</pubdate>
+            <title>eBird: A citizen-based bird observation network in the biological sciences</title>
+            <geoform>vector digital data</geoform>
+            <serinfo>
+              <sername>Biological Conservation</sername>
+              <issue>vol. 142, issue 10</issue>
+            </serinfo>
+            <pubinfo>
+              <pubplace>n/a</pubplace>
+              <publish>Elsevier BV</publish>
+            </pubinfo>
+            <othercit>ppg. 2282-2292</othercit>
+            <onlink>https://doi.org/10.1016/j.biocon.2009.05.006</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <rngdates>
+              <begdate>20130615</begdate>
+              <enddate>20230730</enddate>
+            </rngdates>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>eBird</srccitea>
+        <srccontr>Bird presences and absences to train species distribution model</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Ralph Dubayah</origin>
+            <origin>James Bryan Blair</origin>
+            <origin>Scott Goetz</origin>
+            <origin>Lola Fatoyinbo</origin>
+            <origin>Matthew Hansen</origin>
+            <origin>Sean Healey</origin>
+            <origin>Michelle Hofton</origin>
+            <origin>George Hurtt</origin>
+            <origin>James Kellner</origin>
+            <origin>Scott Luthcke</origin>
+            <origin>John Armston</origin>
+            <origin>Hao Tang</origin>
+            <origin>Laura Duncanson</origin>
+            <origin>Steven Hancock</origin>
+            <origin>Patrick Jantz</origin>
+            <origin>Suzanne Marselis</origin>
+            <origin>Paul L. Patterson</origin>
+            <origin>Wenlu Qi</origin>
+            <origin>Carlos Silva</origin>
+            <pubdate>202006</pubdate>
+            <title>The Global Ecosystem Dynamics Investigation: High-resolution laser ranging of the Earth’s forests and topography</title>
+            <geoform>raster digital data</geoform>
+            <serinfo>
+              <sername>Science of Remote Sensing</sername>
+              <issue>vol. 1</issue>
+            </serinfo>
+            <pubinfo>
+              <pubplace>n/a</pubplace>
+              <publish>Elsevier BV</publish>
+            </pubinfo>
+            <othercit>ppg. 100002</othercit>
+            <onlink>https://doi.org/10.1016/j.srs.2020.100002</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <rngdates>
+              <begdate>20190101</begdate>
+              <enddate>20230101</enddate>
+            </rngdates>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>GEDI</srccitea>
+        <srccontr>predictor data for vegetation structure</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>John T. Abatzoglou</origin>
+            <origin>Solomon Z. Dobrowski</origin>
+            <origin>Sean A. Parks</origin>
+            <origin>Katherine C. Hegewisch</origin>
+            <pubdate>20180109</pubdate>
+            <title>TerraClimate, a high-resolution global dataset of monthly climate and climatic water balance from 1958–2015</title>
+            <geoform>raster digital data</geoform>
+            <serinfo>
+              <sername>Scientific Data</sername>
+              <issue>vol. 5, issue 1</issue>
+            </serinfo>
+            <pubinfo>
+              <pubplace>n/a</pubplace>
+              <publish>Springer Science and Business Media LLC</publish>
+            </pubinfo>
+            <onlink>https://doi.org/10.1038/sdata.2017.191</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <rngdates>
+              <begdate>1979</begdate>
+              <enddate>2024</enddate>
+            </rngdates>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>Terraclimate</srccitea>
+        <srccontr>Climate predictor data for SDMs</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>R. Crippen</origin>
+            <origin>S. Buckley</origin>
+            <origin>P. Agram</origin>
+            <origin>E. Belz</origin>
+            <origin>E. Gurrola</origin>
+            <origin>S. Hensley</origin>
+            <origin>M. Kobrick</origin>
+            <origin>M. Lavalle</origin>
+            <origin>J. Martin</origin>
+            <origin>M. Neumann</origin>
+            <origin>Q. Nguyen</origin>
+            <origin>P. Rosen</origin>
+            <origin>J. Shimada</origin>
+            <origin>M. Simard</origin>
+            <origin>W. Tung</origin>
+            <pubdate>20160613</pubdate>
+            <title>NASADEM GLOBAL ELEVATION MODEL: METHODS AND PROGRESS</title>
+            <geoform>raster digital data</geoform>
+            <serinfo>
+              <sername>ISPRS - International Archives of the Photogrammetry, Remote Sensing and Spatial Information Sciences</sername>
+              <issue>vol. XLI-B4</issue>
+            </serinfo>
+            <pubinfo>
+              <pubplace>n/a</pubplace>
+              <publish>Copernicus GmbH</publish>
+            </pubinfo>
+            <othercit>ppg. 125-128</othercit>
+            <onlink>https://doi.org/10.5194/isprsarchives-XLI-B4-125-2016</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>2106</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>NASADEM</srccitea>
+        <srccontr>Slope and aspect predictors for SDM</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>David M. Theobald</origin>
+            <origin>Dylan Harrison-Atlas</origin>
+            <origin>William B. Monahan</origin>
+            <origin>Christine M. Albano</origin>
+            <pubdate>20151207</pubdate>
+            <title>Ecologically-Relevant Maps of Landforms and Physiographic Diversity for Climate Adaptation Planning</title>
+            <geoform>raster digital data</geoform>
+            <serinfo>
+              <sername>PLOS ONE</sername>
+              <issue>vol. 10, issue 12</issue>
+            </serinfo>
+            <pubinfo>
+              <pubplace>n/a</pubplace>
+              <publish>Public Library of Science (PLoS)</publish>
+            </pubinfo>
+            <othercit>ppg. e0143619</othercit>
+            <onlink>https://doi.org/10.1371/journal.pone.0143619</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>2015</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>CPI Topography</srccitea>
+        <srccontr>Topography predictors for SDM</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Collin G. Homer</origin>
+            <origin>Joyce A. Fry</origin>
+            <origin>Christopher A. Barnes</origin>
+            <pubdate>2012</pubdate>
+            <title>The National Land Cover Database</title>
+            <geoform>raster digital data</geoform>
+            <pubinfo>
+              <pubplace>n/a</pubplace>
+              <publish>US Geological Survey</publish>
+            </pubinfo>
+            <onlink>https://doi.org/10.3133/fs20123020</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <rngdates>
+              <begdate>1985</begdate>
+              <enddate>2023</enddate>
+            </rngdates>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>NLCD</srccitea>
+        <srccontr>Landcover predictors for SDM</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Karin L. Riley</origin>
+            <origin>Isaac C. Grenfell</origin>
+            <origin>Mark A. Finney</origin>
+            <origin>Jason M. Wiener</origin>
+            <pubdate>20210115</pubdate>
+            <title>TreeMap, a tree-level model of conterminous US forests circa 2014 produced by imputation of FIA plot data</title>
+            <geoform>raster digital data</geoform>
+            <serinfo>
+              <sername>Scientific Data</sername>
+              <issue>vol. 8, issue 1</issue>
+            </serinfo>
+            <pubinfo>
+              <pubplace>n/a</pubplace>
+              <publish>Springer Science and Business Media LLC</publish>
+            </pubinfo>
+            <onlink>https://doi.org/10.1038/s41597-020-00782-x</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>2016</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>TreeMap</srccitea>
+        <srccontr>Tree species predictors for SDM</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Zachary J. Robbins</origin>
+            <origin>E. Louise Loudermilk</origin>
+            <origin>Tina G. Mozelewski</origin>
+            <origin>Kate Jones</origin>
+            <origin>Robert M. Scheller</origin>
+            <pubdate>20240112</pubdate>
+            <title>Fire regimes of the Southern Appalachians may radically shift under climate change</title>
+            <geoform>publication</geoform>
+            <serinfo>
+              <sername>Fire Ecology</sername>
+              <issue>vol. 20, issue 1</issue>
+            </serinfo>
+            <pubinfo>
+              <pubplace>n/a</pubplace>
+              <publish>Springer Science and Business Media LLC</publish>
+            </pubinfo>
+            <onlink>https://doi.org/10.1186/s42408-023-00231-1</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>2024</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>LANDIS params</srccitea>
+        <srccontr>Parameterization for LANDIS-II model to generate projections of bird habitat</srccontr>
+      </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>W.Brad Smith</origin>
+            <pubdate>200203</pubdate>
+            <title>Forest inventory and analysis: a national inventory and monitoring program</title>
+            <geoform>publication</geoform>
+            <serinfo>
+              <sername>Environmental Pollution</sername>
+              <issue>vol. 116</issue>
+            </serinfo>
+            <pubinfo>
+              <pubplace>n/a</pubplace>
+              <publish>Elsevier BV</publish>
+            </pubinfo>
+            <othercit>ppg. S233-S242</othercit>
+            <onlink>https://doi.org/10.1016/S0269-7491(01)00255-X</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>2024</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>publication date</srccurr>
+        </srctime>
+        <srccitea>FIA</srccitea>
+        <srccontr>Crosswalk from LANDIS-II to species distribution model</srccontr>
+      </srcinfo>
+      <procstep>
+        <procdesc>Create SDMs
+
+For each species, we fit species distribution models (SDMs) using boosted regression trees and a suite of remotely sensed datasets and publicly available data sources. Our models were trained on eBird data for Bird Conservation Region 28 from 2013-2023. eBird data were spatially and temporally thinned to 1.7 km and two weeks between checklists in order to prevent overrepresentation of species hotspots. Absences were randomly selected from eBird checklists such that our final dataset had an equal number of presences and absences. The number of observations used was limited to 5000 presences, randomly chosen from the reduced set of checklists. For more details on the SDM process, see Flake et al. (unpublished ms).</procdesc>
+        <procdate>2024</procdate>
+      </procstep>
+      <procstep>
+        <procdesc>Creating LANDIS-II predictions
+
+We used the LANDIS-II landscape change model framework (Scheller et al. 2007) to make projections of future vegetation across the southern Appalachians.  LANDIS-II projects vegetation change as a function of climate, disturbance, and human activity.  It is a non-equilibrium, stochastic model that is initialized with a ‘snapshot’ (or ‘digital twin’) of current vegetation conditions, including tree species and their ages and distributions, from which various processes (succession, competition, dispersal, disturbance, forest management) alter the composition and structure of vegetation over time.  LANDIS-II includes the capacity for climate to influence these processes as appropriate.  We built upon previous forecasts of forest change in the southern Appalachians (Robbins 2022, Robbins 2024).  Robbins et al. (2024) included forest succession (via the NECN extension), wildfire (via the Social-Climate-Fire extension), and harvesting (via the Biomass Harvesting).  Detailed information on parameterization can be found in Robbins et al. (2024). 
+
+We ran each model using initial conditions as described in Robbins et al. (2024), using two climate futures. HadGEM represents a high-warming scenario with high interannual variation in drought conditions, while MRI-CGM represents a scenario with less warming and little interannual variation in drought. In past analyses, this difference in climate trajectories resulted in dramatic differences in fire regimes, with potential knock-on impacts on bird habitat.</procdesc>
+        <srcused>LANDIS params</srcused>
+        <procdate>2024</procdate>
+      </procstep>
+      <procstep>
+        <procdesc>Crosswalk LANDIS-II to SDMs
+
+Because the structure of LANDIS-II sites and cohorts differs from the input data we used for our SDMs, we developed models to crosswalk some LANDIS-II variables to counterparts in the SDM model to generate forecasts. For several variables, we developed regression equations to crosswalk the LANDIS-II initial communities to Forest Inventory and Analysis (FIA) data (Burrill et al., 2021) data from SC, GA, NC, TN, VA, and KY. We developed power-law regressions relating tree cohort age, species, and biomass to tree heights using the FIA SITETREE table, following previous work (Boardman et al., 2025). These regressions had fairly good fit, with coefficients of determination typically &gt; 0.3, ranging from 0.14 to 0.55. Using these equations, we estimated cohort heights from their ages and species and then calculated RH98 as the 98th percentile of estimated cohort heights, FHD as the Shannon entropy of binned cohort heights, whether a site was “open” or not using tree heights and modeled LAI. We mapped these derived variables onto the LANDIS-II study area, and sampled 10,000 cells from both the LANDIS-II surface and the SDM training surfaces derived from remote sensing data for comparison.</procdesc>
+        <srcused>FIA</srcused>
+        <procdate>2024</procdate>
+      </procstep>
+    </lineage>
+  </dataqual>
+  <spdoinfo>
+    <direct>Raster</direct>
+    <rastinfo>
+      <rasttype>Grid Cell</rasttype>
+      <rowcount>1050</rowcount>
+      <colcount>1334</colcount>
+      <vrtcount>1</vrtcount>
+    </rastinfo>
+  </spdoinfo>
+  <spref>
+    <horizsys>
+      <planar>
+        <gridsys>
+          <gridsysn>Universal Transverse Mercator</gridsysn>
+          <utm>
+            <utmzone>17</utmzone>
+            <transmer>
+              <sfctrmer>0.9996</sfctrmer>
+              <longcm>-81.0</longcm>
+              <latprjo>0.0</latprjo>
+              <feast>500000.0</feast>
+              <fnorth>0.0</fnorth>
+            </transmer>
+          </utm>
+        </gridsys>
+        <planci>
+          <plance>row and column</plance>
+          <coordrep>
+            <absres>260.11173417731777</absres>
+            <ordres>260.1117341773181</ordres>
+          </coordrep>
+          <plandu>meters</plandu>
+        </planci>
+      </planar>
+      <geodetic>
+        <horizdn>Unknown_based_on_GRS80_ellipsoid</horizdn>
+        <ellips>GRS 1980</ellips>
+        <semiaxis>6378137.0</semiaxis>
+        <denflat>298.257222101004</denflat>
+      </geodetic>
+    </horizsys>
+  </spref>
+  <eainfo>
+    <detailed>
+      <enttyp>
+        <enttypl>Future_bird_projections</enttypl>
+        <enttypd>Raster geospatial data file.</enttypd>
+        <enttypds>Producer Defined</enttypds>
+      </enttyp>
+      <attr>
+        <attrlabl>Value</attrlabl>
+        <attrdef>Habitat index (class-balanced encounter rate) predicted from LANDIS-II simulation model and species distribution model</attrdef>
+        <attrdefs>Producer Defined</attrdefs>
+        <attrdomv>
+          <edom>
+            <edomv>nan</edomv>
+            <edomvd>Not modeled (inactive cells), either outside study area or non-forested</edomvd>
+            <edomvds>Producer defined</edomvds>
+          </edom>
+        </attrdomv>
+        <attrdomv>
+          <rdom>
+            <rdommin>0.0149698369205</rdommin>
+            <rdommax>0.98937177658081</rdommax>
+          </rdom>
+        </attrdomv>
+      </attr>
+    </detailed>
+    <overview>
+      <eaover>The LANDIS-II model was run for 80 years using two climate scenarios. Each 10 years, vegetation and climate data was output from the LANDIS-II model and used generate predictions from the SDM. Three sets of predictions were created: a "full" prediction using all of the variables; a "clim" prediction that holds climate constant (i.e., uses year-0 climate) and vegetation data from the present timestep; and "veg" prediction that holds vegetation constant (i.e. year-0 vegetation state) with varying climate. There are five replicate runs for each climate scenario. 
+
+The naming convention is as follows: type of prediction _ species _ climate scenario _ management scenario _ replicate _ timestep
+
+For example, clim_predictions_acfl_HighTHighV BAU - Run1_0 refers to the "clim_predictions" that keep climate constant, for Alder Flycatcher, for the HadGEM2 ES365 RCP 8.5 climate scenario.
+
+
+HighTHighV refers to HadGEM2; LowTLowV refers to MRI-GCCM3
+
+Raster files are identified by a four-letter banding code for species.
+
+Banding codes for study species are as follows:
+
+Species		Scientific name	Banding code
+
+Acadian flycatcher	Empidonax virescens	ACFL
+Alder flycatcher	Empidonax alnorum	ALFL
+Blackburnian warbler	Setophaga fusca	BLBW
+Black-capped chickadee	Poecile atricapillus	BCCH
+Blue-winged warbler	Vermivora cyanoptera	BWWA
+Brown-headed nuthatch	Sitta pusilla		BHNU
+Cerulean warbler	Setophaga cerulea	CERW
+Eastern whip-poor-will	Antrostomus vociferus	EWPW
+Golden-winged warbler	Vermivora chrysoptera	GWWA
+Hermit thrush		Catharus guttatus	HETH
+Kentucky warbler	Geothlypis formosa	KEWA
+Louisiana waterthrush	Parkesia motacilla	LOWA
+Nashville warbler	Leiothlypis ruficapilla	NAWA
+Northern saw-whet owl	Aegolius acadicus	NSWO
+Olive-sided flycatcher	Contopus cooperi	OSFL
+Ovenbird		Seiurus aurocapilla	OVEN
+Prairie warbler	Setophaga discolor	PRAW
+Protonotary warbler	Protonotaria citrea	PROW
+Red crossbill		Loxia curvirostra	RECR
+Ruffed grouse		Bonasa umbellus	RUGR
+Swainson’s warbler	Limnothlypis swainsonii	SWWA
+Veery		Catharus fuscescens	VEER
+Wood thrush		Hylocichla mustelina	WOTH
+Worm-eating warbler	Helmitheros vermivorus	WEWA
+Yellow-throated warbler	Setophaga dominica	YTWA
+</eaover>
+      <eadetcit>NA</eadetcit>
+    </overview>
+  </eainfo>
+  <distinfo>
+    <distrib>
+      <cntinfo>
+        <cntperp>
+          <cntper>Samuel Flake</cntper>
+          <cntorg>North Carolina State University</cntorg>
+        </cntperp>
+        <cntaddr>
+          <addrtype>mailing address</addrtype>
+          <address>North Carolina State University</address>
+          <city>Raleigh</city>
+          <state>NC</state>
+          <postal>27695</postal>
+        </cntaddr>
+        <cntvoice>336-944-1198</cntvoice>
+        <cntemail>swflake@ncsu.edu</cntemail>
+      </cntinfo>
+    </distrib>
+    <distliab>Unless otherwise stated, all data, metadata and related materials are considered to satisfy the quality standards relative to the purpose for which the data were collected. Although these data and associated metadata have been reviewed for accuracy and completeness and approved for release by the U.S. Geological Survey (USGS), no warranty expressed or implied is made regarding the display or utility of the data for other purposes, nor on all computer systems, nor shall the act of distribution constitute any such warranty.</distliab>
+    <stdorder>
+      <digform><digtinfo>
+          <formname>Digital Data</formname>
+        </digtinfo>
+        <digtopt><onlinopt><computer><networka><networkr>https://github.com/flakesw/LANDIS-Bird-Habitat-Change</networkr></networka></computer></onlinopt></digtopt></digform>
+      <fees>None</fees>
+    </stdorder>
+  </distinfo>
+  <metainfo>
+    <metd>20250502</metd>
+    <metc>
+      <cntinfo>
+        <cntperp>
+          <cntper>Samuel W. Flake</cntper>
+          <cntorg>North Carolina State University</cntorg>
+        </cntperp>
+        <cntpos>Postdoctoral scholar</cntpos>
+        <cntaddr>
+          <addrtype>mailing</addrtype>
+          <address>North Carolina State University</address>
+          <city>Raleigh</city>
+          <state>NC</state>
+          <postal>27695</postal>
+        </cntaddr>
+        <cntvoice>336-944-1198</cntvoice>
+        <cntemail>swflake@ncsu.edu</cntemail>
+      </cntinfo>
+    </metc>
+    <metstdn>FGDC Biological Data Profile of the Content Standard for Digital Geospatial Metadata</metstdn>
+    <metstdv>FGDC-STD-001.1-1999</metstdv>
+  </metainfo>
+</metadata>
