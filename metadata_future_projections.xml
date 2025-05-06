@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!--Record created using version 2.1.0 of the USGS Metadata Wizard tool. (https://github.com/DOI-USGS/fort-pymdwizard)-->
 <metadata>
   <idinfo>
     <citation>
@@ -12,6 +13,8 @@
           <pubplace>Raleigh, NC</pubplace>
           <publish>North Carolina State University</publish>
         </pubinfo>
+        <onlink>doi.org/10.5281/zenodo.15347078</onlink>
+        <onlink>https://github.com/flakesw/LANDIS-Bird-Habitat-Change/</onlink>
       </citeinfo>
     </citation>
     <descript>
@@ -438,6 +441,28 @@ tidyverse_1.3.2 sf_1.0-19       terra_1.6-47  </native>
         <srccitea>FIA</srccitea>
         <srccontr>Crosswalk from LANDIS-II to species distribution model</srccontr>
       </srcinfo>
+      <srcinfo>
+        <srccite>
+          <citeinfo>
+            <origin>Samuel W. Flake</origin>
+            <pubdate>20250505</pubdate>
+            <title>Species distribution models for Appalachian bird species of conservation concern, circa 2023</title>
+            <geoform>models</geoform>
+            <onlink>doi.org/10.5281/zenodo.15345311</onlink>
+          </citeinfo>
+        </srccite>
+        <typesrc>Digital and/or Hardcopy</typesrc>
+        <srctime>
+          <timeinfo>
+            <sngdate>
+              <caldate>2023</caldate>
+            </sngdate>
+          </timeinfo>
+          <srccurr>observed</srccurr>
+        </srctime>
+        <srccitea>SDMs</srccitea>
+        <srccontr>Species distribution models used to create predicted habitat index</srccontr>
+      </srcinfo>
       <procstep>
         <procdesc>Create SDMs
 
@@ -458,6 +483,7 @@ We ran each model using initial conditions as described in Robbins et al. (2024)
 
 Because the structure of LANDIS-II sites and cohorts differs from the input data we used for our SDMs, we developed models to crosswalk some LANDIS-II variables to counterparts in the SDM model to generate forecasts. For several variables, we developed regression equations to crosswalk the LANDIS-II initial communities to Forest Inventory and Analysis (FIA) data (Burrill et al., 2021) data from SC, GA, NC, TN, VA, and KY. We developed power-law regressions relating tree cohort age, species, and biomass to tree heights using the FIA SITETREE table, following previous work (Boardman et al., 2025). These regressions had fairly good fit, with coefficients of determination typically &gt; 0.3, ranging from 0.14 to 0.55. Using these equations, we estimated cohort heights from their ages and species and then calculated RH98 as the 98th percentile of estimated cohort heights, FHD as the Shannon entropy of binned cohort heights, whether a site was “open” or not using tree heights and modeled LAI. We mapped these derived variables onto the LANDIS-II study area, and sampled 10,000 cells from both the LANDIS-II surface and the SDM training surfaces derived from remote sensing data for comparison.</procdesc>
         <srcused>FIA</srcused>
+        <srcused>SDMs</srcused>
         <procdate>2024</procdate>
       </procstep>
     </lineage>
